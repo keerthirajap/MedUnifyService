@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedUnify.Domain", "MedUnify.Domain\MedUnify.Domain.csproj", "{E6EA63EF-C736-406F-9599-AA1811574CD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.Domain", "MedUnify.Domain\MedUnify.Domain.csproj", "{E6EA63EF-C736-406F-9599-AA1811574CD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedUnify.Infrastructure", "MedUnify.Infrastructure\MedUnify.Infrastructure.csproj", "{82A29A75-F3EB-4C06-A063-D12779371285}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.Infrastructure", "MedUnify.Infrastructure\MedUnify.Infrastructure.csproj", "{82A29A75-F3EB-4C06-A063-D12779371285}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedUnify.ResourceModel", "MedUnify.ResourceModel\MedUnify.ResourceModel.csproj", "{3FEA9921-8D4C-4DEC-B129-EF1ED2B2C5FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.ResourceModel", "MedUnify.ResourceModel\MedUnify.ResourceModel.csproj", "{3FEA9921-8D4C-4DEC-B129-EF1ED2B2C5FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apis", "Apis", "{A23ED2AF-5A3B-4E32-8F94-5C76C10CDC08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedUnify.AuthAPI", "Apis\MedUnify.AuthAPI\MedUnify.AuthAPI.csproj", "{2C144A20-2502-4199-B83F-C3C6CB22531F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.AuthAPI", "Apis\MedUnify.AuthAPI\MedUnify.AuthAPI.csproj", "{2C144A20-2502-4199-B83F-C3C6CB22531F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{367F40C5-E3A1-4F1A-A06C-035FFFDFDF6D}"
 EndProject
@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{6E
 		..\..\MedUnifyDB.mdf = ..\..\MedUnifyDB.mdf
 		..\..\MedUnifyDB_log.ldf = ..\..\MedUnifyDB_log.ldf
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.HealthPulseAPI", "Apis\MedUnify.HealthPulseAPI\MedUnify.HealthPulseAPI.csproj", "{3364D7E9-5A41-4209-9651-CD2EF2172C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{2C144A20-2502-4199-B83F-C3C6CB22531F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C144A20-2502-4199-B83F-C3C6CB22531F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C144A20-2502-4199-B83F-C3C6CB22531F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3364D7E9-5A41-4209-9651-CD2EF2172C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3364D7E9-5A41-4209-9651-CD2EF2172C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3364D7E9-5A41-4209-9651-CD2EF2172C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3364D7E9-5A41-4209-9651-CD2EF2172C3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 		{82A29A75-F3EB-4C06-A063-D12779371285} = {367F40C5-E3A1-4F1A-A06C-035FFFDFDF6D}
 		{3FEA9921-8D4C-4DEC-B129-EF1ED2B2C5FA} = {367F40C5-E3A1-4F1A-A06C-035FFFDFDF6D}
 		{2C144A20-2502-4199-B83F-C3C6CB22531F} = {A23ED2AF-5A3B-4E32-8F94-5C76C10CDC08}
+		{3364D7E9-5A41-4209-9651-CD2EF2172C3D} = {A23ED2AF-5A3B-4E32-8F94-5C76C10CDC08}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F26A3488-DDF3-4BA8-A188-93D8BDD48EFE}
