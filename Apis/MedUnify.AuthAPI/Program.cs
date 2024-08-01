@@ -1,21 +1,29 @@
 namespace MedUnify.AuthAPI
 {
     using FluentValidation.AspNetCore;
+
     using MedUnify.AuthAPI.DbContext;
+    using MedUnify.AuthAPI.Filters;
+    using MedUnify.AuthAPI.Middlewares;
     using MedUnify.AuthAPI.Repositories;
     using MedUnify.AuthAPI.Repositories.Concrete;
     using MedUnify.AuthAPI.Services.Concrete;
     using MedUnify.AuthAPI.Services.Interface;
     using MedUnify.ResourceModel;
+
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
+    using NLog.Web;
     using System.Text;
 
     public class Program
     {
         public static void Main(string[] args)
         {
+            // Configure NLog
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+
             var builder = WebApplication.CreateBuilder(args);
             // Access configuration
             var configuration = builder.Configuration;
@@ -50,13 +58,19 @@ namespace MedUnify.AuthAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(LogPageRequestAttribute));
+                options.Filters.Add(typeof(LogExceptionAttribute));
+            }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ResourceModels>());
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             // Register FluentValidation
-            builder.Services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ResourceModels>());
+
+            builder.Host.UseNLog();
 
             var app = builder.Build();
 
@@ -67,8 +81,18 @@ namespace MedUnify.AuthAPI
                 app.UseSwaggerUI();
             }
 
+            app.UseCors(builder => builder
+                     .AllowAnyOrigin()
+                     .AllowAnyMethod()
+                     .AllowAnyHeader()
+                     .WithExposedHeaders("x-request-id"));
+
+            // Add RequestIdMiddleware to the pipeline
+            app.UseMiddleware<RequestIdMiddleware>();
+
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
