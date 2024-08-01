@@ -1,7 +1,6 @@
 ﻿namespace MedUnify.ResourceModel
 {
-    public class Class1
+    public class ResourceModels
     {
-
     }
 }
