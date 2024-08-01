@@ -3,6 +3,9 @@ namespace MedUnify.AuthAPI
     using FluentValidation.AspNetCore;
     using MedUnify.AuthAPI.DbContext;
     using MedUnify.AuthAPI.Repositories;
+    using MedUnify.AuthAPI.Repositories.Concrete;
+    using MedUnify.AuthAPI.Services.Concrete;
+    using MedUnify.AuthAPI.Services.Interface;
     using MedUnify.ResourceModel;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
@@ -21,13 +24,14 @@ namespace MedUnify.AuthAPI
 
             string sqlConnectionString = builder.Configuration.GetConnectionString("MedUnifyDb");
 
-            sqlConnectionString = sqlConnectionString.Replace("__ReplaceWithBinFolder__", absoluteProjectFolderPath);
+            sqlConnectionString = sqlConnectionString.Replace("__ReplaceWithProjectFolder__", absoluteProjectFolderPath);
 
             // Configure services
             builder.Services.AddDbContext<MedUnifyDbContext>(options =>
                 options.UseSqlServer(sqlConnectionString));
 
             builder.Services.AddScoped<IOAuthClientRepository, OAuthClientRepository>();
+            builder.Services.AddScoped<IOAuthClientService, OAuthClientService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

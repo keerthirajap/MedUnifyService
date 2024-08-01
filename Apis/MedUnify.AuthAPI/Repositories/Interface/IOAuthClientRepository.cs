@@ -1,4 +1,4 @@
-﻿namespace MedUnify.AuthAPI.Repositories.Interface
+﻿namespace MedUnify.AuthAPI.Repositories
 {
     using global::MedUnify.Domain.Auth;
     using MedUnify.AuthAPI.DbContext;

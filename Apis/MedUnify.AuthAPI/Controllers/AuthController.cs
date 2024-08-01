@@ -1,6 +1,6 @@
 ﻿namespace MedUnify.AuthAPI.Controllers
 {
-    using global::MedUnify.AuthAPI.Repositories;
+    using global::MedUnify.AuthAPI.Services.Interface;
     using global::MedUnify.ResourceModel;
     using global::MedUnify.ResourceModel.Auth;
     using Microsoft.AspNetCore.Authorization;
@@ -17,12 +17,12 @@
         [Route("api/[controller]")]
         public class AuthController : ControllerBase
         {
-            private readonly IOAuthClientRepository _oauthClientRepository;
+            private readonly IOAuthClientService _oAuthClientService;
             private readonly IConfiguration _configuration;
 
-            public AuthController(IOAuthClientRepository oauthClientRepository, IConfiguration configuration)
+            public AuthController(IOAuthClientService oAuthClientService, IConfiguration configuration)
             {
-                this._oauthClientRepository = oauthClientRepository;
+                this._oAuthClientService = oAuthClientService;
                 this._configuration = configuration;
             }
 
@@ -46,7 +46,7 @@
                 authToken.CreatedOn = DateTime.UtcNow;
                 authToken.ExpireOn = DateTime.UtcNow.AddHours(Convert.ToInt32(_configuration["Jwt:AuthTokenExpireInMinutes"]));
 
-                var client = await this._oauthClientRepository.GetClientByClientIdAsync(model.ClientId);
+                var client = await this._oAuthClientService.GetClientByClientIdAsync(model.ClientId);
 
                 if (client == null || client.ClientSecret != model.ClientSecret)
                 {
