@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.ResourceModel", "MedUnify.ResourceModel\MedUnify.ResourceModel.csproj", "{3FEA9921-8D4C-4DEC-B129-EF1ED2B2C5FA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apis", "Apis", "{A23ED2AF-5A3B-4E32-8F94-5C76C10CDC08}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{A23ED2AF-5A3B-4E32-8F94-5C76C10CDC08}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedUnify.AuthAPI", "Apis\MedUnify.AuthAPI\MedUnify.AuthAPI.csproj", "{2C144A20-2502-4199-B83F-C3C6CB22531F}"
 EndProject

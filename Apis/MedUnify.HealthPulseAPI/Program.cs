@@ -7,6 +7,7 @@ namespace MedUnify.HealthPulseAPI
     using MedUnify.HealthPulseAPI.Middlewares;
     using MedUnify.HealthPulseAPI.Repositories;
     using MedUnify.HealthPulseAPI.Repositories.Concrete;
+    using MedUnify.HealthPulseAPI.Repositories.Interface;
     using MedUnify.HealthPulseAPI.Services.Concrete;
     using MedUnify.HealthPulseAPI.Services.Interface;
     using MedUnify.ResourceModel;
@@ -38,8 +39,8 @@ namespace MedUnify.HealthPulseAPI
             builder.Services.AddDbContext<MedUnifyDbContext>(options =>
                 options.UseSqlServer(sqlConnectionString));
 
-            builder.Services.AddScoped<IOAuthClientRepository, OAuthClientRepository>();
-            builder.Services.AddScoped<IOAuthClientService, OAuthClientService>();
+            builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+            builder.Services.AddScoped<IPatientService, PatientService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
