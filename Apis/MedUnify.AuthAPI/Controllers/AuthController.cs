@@ -64,6 +64,7 @@
                     {
                     new Claim(ClaimTypes.Name, client.ClientId),
                     new Claim("OrganizationId", client.OrganizationId.ToString()),
+                    new Claim("OrganizationName", client.OrganizationName.ToString()),
                     new Claim(ClaimTypes.Role, "User")
                     }),
                     Expires = authToken.ExpireOn,

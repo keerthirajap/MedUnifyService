@@ -1,17 +1,27 @@
 ﻿@inject TokenAuthStateProvider _authStateProvider
 
-<div class="row mb-3 text-center">
-    <div class="col-md-3 text-end">
-        <strong>ClientId:</strong>
-    </div>
-    <div class="col-md-3 text-start">
-        @userClaims.ClientId
-    </div>
-    <div class="col-md-3 text-end">
-        <strong>OrganizationId:</strong>
-    </div>
-    <div class="col-md-3 text-start">
-        @userClaims.OrganizationId
+<div class="container">
+    <div class="row pb-1 mb-2 mt-3 text-center bg-secondary text-white" style="box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;">
+        <div class="col-md-2 text-end">
+            <strong>Client Id:</strong>
+        </div>
+        <div class="col-md-2 text-start">
+            @userClaims.ClientId
+        </div>
+
+        <div class="col-md-2 text-end">
+            <strong>Organization:</strong>
+        </div>
+        <div class="col-md-2 text-start">
+            @userClaims.OrganizationName
+        </div>
+
+        <div class="col-md-2 text-end">
+            <strong>Organization Id:</strong>
+        </div>
+        <div class="col-md-1 text-start">
+            @userClaims.OrganizationId
+        </div>
     </div>
 </div>
 

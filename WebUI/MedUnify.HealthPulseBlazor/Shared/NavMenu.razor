@@ -1,25 +1,37 @@
 ﻿@inject TokenAuthStateProvider AuthenticationService
 @inject NavigationManager Navigation
 
-<nav class="navbar navbar-expand-md bg-secondary shadow-lg sticky-top border-bottom" data-bs-theme="dark">
-    <div class="container">
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg bg-body-tertiary bg-light" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">MedUnify Health Pulse</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasLabel">Aperture</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav flex-grow-1 justify-content-end">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                @if (isAuthenticated)
+                {
+                    <li class="nav-item me-4 ">
+                        <a class="nav-link text-dark" href="\Patients">Patients</a>
+                    </li>
+                }
+                else
+                {
 
+                }
+            </ul>
+            <form class="d-flex" role="search">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     @if (isAuthenticated)
                     {
-                        <li class="nav-item me-4"><a class="nav-link" href="\Patients">Patients</a></li>
-                        <li class="nav-item me-2">
+                        @* <li class="nav-item me-2">
+                           <div>
+                                <p class="p-0 m-0">123</p>
+                                <p class="p-0 m-0">123</p>
+                           </div>
+                        </li> *@
 
+                        <li class="nav-item me-2">
                             <button class="btn btn-danger" type="submit" @onclick="Logout"> Logout </button>
                         </li>
                     }
@@ -28,7 +40,8 @@
                         <li class="nav-item me-2"><a class="nav-link" href="\login">Login</a></li>
                     }
                 </ul>
-            </div>
+
+            </form>
         </div>
     </div>
 </nav>

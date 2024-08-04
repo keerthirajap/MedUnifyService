@@ -84,20 +84,6 @@ namespace MedUnify.HealthPulseBlazor.Providers
         public async Task<string> GetTokenAsync()
         {
             return await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-            //var expiry = await _jsRuntime.InvokeAsync<object>("localStorage.getItem", "authTokenExpiry");
-            //if (expiry != null)
-            //{
-            //    if (DateTime.Parse(expiry.ToString()) > DateTime.Now)
-            //    {
-            //        return await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-            //    }
-            //    else
-            //    {
-            //        await SetTokenAsync(null);
-            //    }
-            //}
-            //return null;
         }
 
         public async Task<OAuthClientRM> GetUserClaimsAsync()
@@ -108,7 +94,7 @@ namespace MedUnify.HealthPulseBlazor.Providers
 
             foreach (var item in authenticationState.User.Claims)
             {
-                if (item.Type.ToLower().Contains("name"))
+                if (item.Type.ToLower().Equals("unique_name"))
                 {
                     oAuthClient.ClientId = item.Value;
                 }
@@ -116,6 +102,11 @@ namespace MedUnify.HealthPulseBlazor.Providers
                 if (item.Type.ToLower().Contains("organizationid"))
                 {
                     oAuthClient.OrganizationId = Convert.ToInt32(item.Value);
+                }
+
+                if (item.Type.ToLower().Contains("organizationname"))
+                {
+                    oAuthClient.OrganizationName = item.Value;
                 }
             }
 
@@ -129,7 +120,7 @@ namespace MedUnify.HealthPulseBlazor.Providers
                 ? new ClaimsIdentity()
                 : new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
 
-            //// Log all claims for debugging
+            // Log all claims for debugging
             //foreach (var claim in identity.Claims)
             //{
             //    Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");

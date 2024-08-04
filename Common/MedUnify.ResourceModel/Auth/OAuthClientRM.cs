@@ -11,5 +11,7 @@
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public int OrganizationId { get; set; }
+
+        public string OrganizationName { get; set; }
     }
 }
