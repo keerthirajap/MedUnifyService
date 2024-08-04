@@ -1,4 +1,4 @@
-﻿namespace MedUnify.AuthAPI.Middlewares
+﻿namespace MedUnify.AuthAPI.Infrastructure.Middlewares
 {
     public class RequestIdMiddleware
     {

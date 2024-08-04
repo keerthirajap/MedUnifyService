@@ -1,5 +1,28 @@
-﻿<h3>Patients</h3>
+﻿@page "/patients"
+@using MedUnify.ResourceModel.HealthPulse
+@inject PatientAPIService PatientService
+
+<h3>Patients</h3>
+
+@if (patients == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var patient in patients)
+        {
+            <li>@patient.FirstName - <a href="@(string.Format("/patient/{0}", patient.PatientId))">View</a></li>
+        }
+    </ul>
+}
 
 @code {
+    private List<PatientRM> patients;
 
+    protected override async Task OnInitializedAsync()
+    {
+        patients = await PatientService.GetPatientsAsync();
+    }
 }

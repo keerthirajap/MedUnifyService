@@ -1,6 +1,7 @@
 ﻿namespace MedUnify.AuthAPI.DbContext
 {
     using MedUnify.Domain.Auth;
+    using MedUnify.Domain.HealthPulse;
     using Microsoft.EntityFrameworkCore;
 
     public class MedUnifyDbContext : DbContext

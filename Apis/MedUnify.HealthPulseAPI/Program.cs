@@ -3,6 +3,7 @@ namespace MedUnify.HealthPulseAPI
     using FluentValidation.AspNetCore;
 
     using MedUnify.HealthPulseAPI.DbContext;
+    using MedUnify.HealthPulseAPI.Infrastructure.AutoMapper;
     using MedUnify.HealthPulseAPI.Infrastructure.Filters;
     using MedUnify.HealthPulseAPI.Infrastructure.Handlers;
     using MedUnify.HealthPulseAPI.Infrastructure.Middlewares;
@@ -79,7 +80,7 @@ namespace MedUnify.HealthPulseAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Register FluentValidation
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             builder.Host.UseNLog();
 

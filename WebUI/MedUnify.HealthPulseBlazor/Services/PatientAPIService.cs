@@ -1,30 +1,34 @@
 ﻿namespace MedUnify.HealthPulseBlazor.Services
 {
     using MedUnify.HealthPulseBlazor.Pages.Patients;
+    using MedUnify.HealthPulseBlazor.Providers;
     using MedUnify.ResourceModel.HealthPulse;
     using System.Net.Http.Headers;
     using System.Net.Http.Json;
 
     public class PatientAPIService
     {
+        private readonly TokenAuthStateProvider _tokenAuthStateProvider;
+
         private readonly HttpClient _httpClient;
 
-        public PatientAPIService(HttpClient httpClient)
+        public PatientAPIService(HttpClient httpClient, TokenAuthStateProvider tokenAuthStateProvider)
         {
+            _tokenAuthStateProvider = tokenAuthStateProvider;
             _httpClient = httpClient;
         }
 
         private async Task AddAuthorizationHeaderAsync()
         {
             // Assume you have a method to retrieve the token
-            string token = await GetTokenAsync();
+            string token = await _tokenAuthStateProvider.GetTokenAsync();
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
         public async Task<List<PatientRM>> GetPatientsAsync()
         {
             await AddAuthorizationHeaderAsync();
-            return await _httpClient.GetFromJsonAsync<List<PatientRM>>("https://api.example.com/GetPatients");
+            return await _httpClient.GetFromJsonAsync<List<PatientRM>>("Patients/GetPatients");
         }
 
         //public async Task<Patient> GetPatientAsync(int patientId)

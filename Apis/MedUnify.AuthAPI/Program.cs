@@ -4,7 +4,7 @@ namespace MedUnify.AuthAPI
 
     using MedUnify.AuthAPI.DbContext;
     using MedUnify.AuthAPI.Filters;
-    using MedUnify.AuthAPI.Middlewares;
+    using MedUnify.AuthAPI.Infrastructure.Middlewares;
     using MedUnify.AuthAPI.Repositories;
     using MedUnify.AuthAPI.Repositories.Concrete;
     using MedUnify.AuthAPI.Services.Concrete;
@@ -67,8 +67,6 @@ namespace MedUnify.AuthAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            // Register FluentValidation
 
             builder.Host.UseNLog();
 
