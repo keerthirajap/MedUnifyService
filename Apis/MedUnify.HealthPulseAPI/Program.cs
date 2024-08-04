@@ -3,8 +3,9 @@ namespace MedUnify.HealthPulseAPI
     using FluentValidation.AspNetCore;
 
     using MedUnify.HealthPulseAPI.DbContext;
-    using MedUnify.HealthPulseAPI.Filters;
-    using MedUnify.HealthPulseAPI.Middlewares;
+    using MedUnify.HealthPulseAPI.Infrastructure.Filters;
+    using MedUnify.HealthPulseAPI.Infrastructure.Handlers;
+    using MedUnify.HealthPulseAPI.Infrastructure.Middlewares;
     using MedUnify.HealthPulseAPI.Repositories;
     using MedUnify.HealthPulseAPI.Repositories.Concrete;
     using MedUnify.HealthPulseAPI.Repositories.Interface;
@@ -62,6 +63,9 @@ namespace MedUnify.HealthPulseAPI
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Secret"]))
         };
     });
+
+            builder.Services.AddScoped<IOrganizationHandler, OrganizationHandler>();
+            builder.Services.AddScoped<OrganizationIdValidationFilter>();
 
             // Add services to the container.
 

@@ -1,4 +1,4 @@
-﻿namespace MedUnify.HealthPulseAPI.Middlewares
+﻿namespace MedUnify.HealthPulseAPI.Infrastructure.Middlewares
 {
     public class RequestIdMiddleware
     {

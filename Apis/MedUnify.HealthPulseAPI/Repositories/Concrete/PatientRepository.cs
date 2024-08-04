@@ -26,8 +26,6 @@
         public async Task<Patient> GetPatientByIdAsync(int id)
         {
             return await _context.Patients
-                                 .Include(p => p.Visits)
-                                    .ThenInclude(v => v.ProgressNotes)
                                  .FirstOrDefaultAsync(p => p.PatientId == id && !p.IsDeleted);
         }
 

@@ -14,12 +14,13 @@
         public string Address { get; set; }
         public string State { get; set; }
         public string City { get; set; }
+
+        public string MobileNumber { get; set; }
         public int OrganizationId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }
 
-        // Navigation property for Visits
-        public ICollection<Visit> Visits { get; set; }
+        //public ICollection<Visit> Visits { get; set; } // No [Required] attribute
     }
 }

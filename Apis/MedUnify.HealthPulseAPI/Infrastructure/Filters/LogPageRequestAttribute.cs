@@ -1,4 +1,4 @@
-﻿namespace MedUnify.HealthPulseAPI.Filters
+﻿namespace MedUnify.HealthPulseAPI.Infrastructure.Filters
 {
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
@@ -12,13 +12,13 @@
 
         public LogPageRequestAttribute(ILogger<LogPageRequestAttribute> logger)
         {
-            this._logger = logger;
+            _logger = logger;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             // Log the request URL
-            this._logger.LogInformation($"Page requested: {context.HttpContext.Request.Path}");
+            _logger.LogInformation($"Page requested: {context.HttpContext.Request.Path}");
 
             base.OnActionExecuting(context);
         }
