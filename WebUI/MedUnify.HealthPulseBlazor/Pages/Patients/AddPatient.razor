@@ -1,6 +1,8 @@
 ﻿@page "/add-patient"
-@inject HttpClient Http
-@inject NavigationManager Navigation
+
+@inject PatientAPIService PatientService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime _jsRuntime
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -72,20 +74,34 @@
 
     private async Task HandleValidSubmit()
     {
-        var response = await Http.PostAsJsonAsync("api/Patients/AddPatient", patient);
-        if (response.IsSuccessStatusCode)
+        var response = await PatientService.AddPatientAsync(patient);
+
+
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
         {
-            Navigation.NavigateTo("/patients");
+            var body = await response.Content.ReadAsStringAsync();
+            var returnStatusRM = JsonSerializer.Deserialize<ReturnStatusResourseModel>(body);
+
+
+            await this._jsRuntime.InvokeVoidAsync("appScripts.showSweetAlertPopup",
+                             returnStatusRM.Status,
+                             returnStatusRM.Title, returnStatusRM.Message);
         }
-        else
+        else if (response.IsSuccessStatusCode)
         {
-            // Handle errors here (e.g., display a message)
+            var body = await response.Content.ReadAsStringAsync();
+            var patientRM = JsonSerializer.Deserialize<PatientRM>(body);
+            await this._jsRuntime.InvokeVoidAsync("appScripts.showSweetAlertPopup",
+                             "success",
+                             "Added New Patient", $"{patientRM.FirstName} - created successfully");
+            StateHasChanged();
+            NavigationManager.NavigateTo("/patients");
         }
     }
 
 
     private void Cancel()   
     {
-        Navigation.NavigateTo("/patients");
+        NavigationManager.NavigateTo("/patients");
     }
 }

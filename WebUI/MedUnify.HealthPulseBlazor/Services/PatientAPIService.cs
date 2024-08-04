@@ -43,28 +43,21 @@
         {
             await AddAuthorizationHeaderAsync();
             var response = await _httpClient.PutAsJsonAsync($"Patients/UpdatePatient?patientId={patientId}", patient);
-
             return response;
         }
 
-        //public async Task AddPatientAsync(Patient patient)
-        //{
-        //    await AddAuthorizationHeaderAsync();
-        //    var response = await _httpClient.PostAsJsonAsync("https://api.example.com/AddPatient", patient);
-        //    response.EnsureSuccessStatusCode();
-        //}
+        public async Task<HttpResponseMessage> AddPatientAsync(PatientRM patient)
+        {
+            await AddAuthorizationHeaderAsync();
+            var response = await _httpClient.PostAsJsonAsync($"Patients/AddPatient", patient);
+            return response;
+        }
 
         public async Task<HttpResponseMessage> DeletePatientAsync(int patientId)
         {
             await AddAuthorizationHeaderAsync();
             var response = await _httpClient.DeleteAsync($"Patients/DeletePatient?patientId={patientId}");
             return response;
-        }
-
-        private async Task<string> GetTokenAsync()
-        {
-            // Implement your logic to retrieve the token here
-            return await Task.FromResult("your-authentication-token");
         }
     }
 }
