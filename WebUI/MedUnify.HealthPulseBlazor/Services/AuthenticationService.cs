@@ -1,5 +1,6 @@
 ﻿namespace MedUnify.HealthPulseBlazor.Services
 {
+    using MedUnify.ResourceModel.Auth;
     using Microsoft.JSInterop;
     using System.Threading.Tasks;
 
@@ -16,19 +17,19 @@
 
         public async Task<bool> LoginAsync(string clientId, string clientSecret)
         {
-            //var requestModel = new TokenRequestResourceModel
-            //{
-            //    ClientId = clientId,
-            //    ClientSecret = clientSecret
-            //};
+            var requestModel = new TokenRequestResourceModel
+            {
+                ClientId = clientId,
+                ClientSecret = clientSecret
+            };
 
-            //var response = await _apiService.GetTokenAsync(requestModel);
+            var response = await _apiService.GetTokenAsync(requestModel);
 
-            //if (response != null)
-            //{
-            //    await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", response.AuthToken);
-            //    return true;
-            //}
+            if (response != null)
+            {
+                await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", response.AuthToken);
+                return true;
+            }
 
             return false;
         }

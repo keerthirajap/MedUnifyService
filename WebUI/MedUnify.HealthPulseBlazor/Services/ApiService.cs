@@ -1,5 +1,6 @@
 ﻿namespace MedUnify.HealthPulseBlazor.Services
 {
+    using MedUnify.ResourceModel.Auth;
     using System.Net.Http.Json;
 
     public class ApiService
@@ -11,11 +12,11 @@
             _httpClient = httpClient;
         }
 
-        //public async Task<TokenResponseResourceModel> GetTokenAsync(TokenRequestResourceModel requestModel)
-        //{
-        //    var response = await _httpClient.PostAsJsonAsync("api/Auth/GetToken", requestModel);
-        //    response.EnsureSuccessStatusCode();
-        //    return await response.Content.ReadFromJsonAsync<TokenResponseResourceModel>();
-        //}
+        public async Task<TokenResponseResourceModel> GetTokenAsync(TokenRequestResourceModel requestModel)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Auth/GetToken", requestModel);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<TokenResponseResourceModel>();
+        }
     }
 }

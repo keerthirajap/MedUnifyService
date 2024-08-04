@@ -24,9 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\MedUnify.Infrastructure\MedUnify.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Common\MedUnify.ResourceModel\MedUnify.ResourceModel.csproj" />
     <ProjectReference Include="..\..\MedUnify.Domain\MedUnify.Domain.csproj" />
-    <ProjectReference Include="..\..\MedUnify.Infrastructure\MedUnify.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\MedUnify.ResourceModel\MedUnify.ResourceModel.csproj" />
   </ItemGroup>
 
 </Project>

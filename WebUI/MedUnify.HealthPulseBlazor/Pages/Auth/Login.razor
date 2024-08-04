@@ -1,0 +1,54 @@
+﻿@page "/login"
+
+@inherits LoginBase
+
+<h3>Login</h3>
+
+@if (IsBusy)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="@loginModel" OnValidSubmit="@HandleLogin">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="clientId">Client ID</label>
+            <InputText id="clientId" class="form-control" @bind-Value="loginModel.ClientId" />
+        </div>
+
+        <div class="form-group">
+            <label for="clientSecret">Client Secret</label>
+            <InputText id="clientSecret" type="password" class="form-control" @bind-Value="loginModel.ClientSecret" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </EditForm>
+}
+
+@code {
+    private TokenRequestResourceModel loginModel = new TokenRequestResourceModel();
+
+    [Inject]
+    private AuthenticationService AuthenticationService { get; set; }
+
+    private async Task HandleLogin()
+    {
+        SetBusy(true);
+
+        bool isAuthenticated = await AuthenticationService.LoginAsync(loginModel.ClientId, loginModel.ClientSecret);
+
+        SetBusy(false);
+
+        if (isAuthenticated)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            // Handle login failure (e.g., show an error message)
+        }
+    }
+}
