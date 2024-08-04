@@ -27,7 +27,6 @@
 	<ItemGroup>
 		<Folder Include="Client\" />
 		<Folder Include="Extensions\" />
-		<Folder Include="Pages\Patients\" />
 		<Folder Include="wwwroot\css\bootstrap\" />
 	</ItemGroup>
 

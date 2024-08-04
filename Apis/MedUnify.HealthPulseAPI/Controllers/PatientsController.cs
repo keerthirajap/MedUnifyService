@@ -5,6 +5,7 @@
     using MedUnify.HealthPulseAPI.Infrastructure.Filters;
     using MedUnify.HealthPulseAPI.Infrastructure.Handlers;
     using MedUnify.HealthPulseAPI.Services.Interface;
+    using MedUnify.ResourceModel;
     using MedUnify.ResourceModel.HealthPulse;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@
         [Route("GetPatients")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PatientRM>))]
-        public async Task<ActionResult<List<Patient>>> GetPatients()
+        public async Task<ActionResult<List<PatientRM>>> GetPatients()
         {
             int organizationId = _organizationHandler.GetOrganizationIdFromToken(User);
 
@@ -39,21 +40,51 @@
 
             patientsRM = this._mapper.Map<List<PatientRM>>(patients);
 
-            return Ok(patients);
+            return Ok(patientsRM);
         }
 
         [Route("GetPatient")]
         [HttpGet]
         [ServiceFilter(typeof(OrganizationIdValidationFilter))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Patient))]
-        public async Task<ActionResult<Patient>> GetPatient(int patientId)
+        public async Task<ActionResult<PatientRM>> GetPatient(int patientId)
         {
+            PatientRM patientRM = new PatientRM();
             var patient = await _patientService.GetPatientByIdAsync(patientId);
             if (patient == null)
             {
                 return NotFound();
             }
-            return Ok(patient);
+
+            patientRM = this._mapper.Map<PatientRM>(patient);
+
+            return Ok(patientRM);
+        }
+
+        [Route("UpdatePatient")]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ReturnStatusResourseModel))]
+        [ServiceFilter(typeof(OrganizationIdValidationFilter))]
+        public async Task<ActionResult> UpdatePatient(int patientId, [FromBody] PatientRM patientRM)
+        {
+            ReturnStatusResourseModel returnStatusRM = new ReturnStatusResourseModel();
+
+            if (patientId != patientRM.PatientId)
+            {
+                return BadRequest();
+            }
+
+            Patient patient = new Patient();
+
+            patient = this._mapper.Map<Patient>(patientRM);
+
+            await _patientService.UpdatePatientAsync(patient);
+
+            returnStatusRM.Status = "success";
+            returnStatusRM.Title = "Updated Successfully";
+            returnStatusRM.Message = $"{patient.FirstName} details updated successfully.";
+            return this.Ok(returnStatusRM);
         }
 
         [Route("AddPatient")]
@@ -73,21 +104,6 @@
 
             await _patientService.AddPatientAsync(patient);
             return CreatedAtAction(nameof(GetPatient), new { id = patient.PatientId }, patient);
-        }
-
-        [Route("UpdatePatient")]
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ServiceFilter(typeof(OrganizationIdValidationFilter))]
-        public async Task<ActionResult> UpdatePatient(int id, [FromBody] Patient patient)
-        {
-            if (id != patient.PatientId)
-            {
-                return BadRequest();
-            }
-
-            await _patientService.UpdatePatientAsync(patient);
-            return NoContent();
         }
 
         [Route("DeletePatient")]

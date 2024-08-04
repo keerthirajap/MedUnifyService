@@ -30,4 +30,8 @@
 		<ProjectReference Include="..\..\MedUnify.Domain\MedUnify.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Infrastructure\Handlers\" />
+	</ItemGroup>
+
 </Project>

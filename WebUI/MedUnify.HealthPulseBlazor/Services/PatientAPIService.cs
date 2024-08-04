@@ -2,9 +2,11 @@
 {
     using MedUnify.HealthPulseBlazor.Pages.Patients;
     using MedUnify.HealthPulseBlazor.Providers;
+    using MedUnify.ResourceModel;
     using MedUnify.ResourceModel.HealthPulse;
     using System.Net.Http.Headers;
     using System.Net.Http.Json;
+    using System.Text.Json;
 
     public class PatientAPIService
     {
@@ -31,23 +33,24 @@
             return await _httpClient.GetFromJsonAsync<List<PatientRM>>("Patients/GetPatients");
         }
 
-        //public async Task<Patient> GetPatientAsync(int patientId)
-        //{
-        //    await AddAuthorizationHeaderAsync();
-        //    return await _httpClient.GetFromJsonAsync<Patient>($"https://api.example.com/GetPatient?patientId={patientId}");
-        //}
+        public async Task<PatientRM> GetPatientByIdAsync(int patientId)
+        {
+            await AddAuthorizationHeaderAsync();
+            return await _httpClient.GetFromJsonAsync<PatientRM>($"Patients/GetPatient?patientId={patientId}");
+        }
+
+        public async Task<HttpResponseMessage> UpdatePatientAsync(int patientId, PatientRM patient)
+        {
+            await AddAuthorizationHeaderAsync();
+            var response = await _httpClient.PutAsJsonAsync($"Patients/UpdatePatient?patientId={patientId}", patient);
+
+            return response;
+        }
 
         //public async Task AddPatientAsync(Patient patient)
         //{
         //    await AddAuthorizationHeaderAsync();
         //    var response = await _httpClient.PostAsJsonAsync("https://api.example.com/AddPatient", patient);
-        //    response.EnsureSuccessStatusCode();
-        //}
-
-        //public async Task UpdatePatientAsync(int patientId, Patient patient)
-        //{
-        //    await AddAuthorizationHeaderAsync();
-        //    var response = await _httpClient.PutAsJsonAsync($"https://api.example.com/UpdatePatient?id={patientId}", patient);
         //    response.EnsureSuccessStatusCode();
         //}
 

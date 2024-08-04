@@ -6,11 +6,14 @@
             console.log("hello");
         }
         publicMethod.showSweetAlertPopup = function (status, title, message) {
+
+            console.log(status + title + message);
+
             Swal.fire(
                 {
-                    icon: status,
                     title: title,
                     text: message,
+                    icon: status,
                 })
         }
 

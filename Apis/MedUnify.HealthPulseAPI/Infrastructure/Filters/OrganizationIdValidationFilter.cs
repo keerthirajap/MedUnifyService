@@ -45,43 +45,18 @@
             var patientIdParameter = context.ActionArguments.Values
                 .FirstOrDefault(arg => arg is int patientId) as int?;
 
-            if (patientIdParameter.HasValue)
-            {
-                var patientId = patientIdParameter.Value;
-                var patient = await _patientService.GetPatientByIdAsync(patientId);
 
-                // If the patient does not exist or the patient is not in the same organization, return Unauthorized
-                if (patient == null || patient.OrganizationId != organizationId)
-                {
-                    context.Result = new UnauthorizedResult();
-                    return;
-                }
-            }
 
-            // Check if patientId is present in the parameter object
+            // Attempt to find the PatientId property in the action arguments
             var patientIdProperty = context.ActionArguments.Values
                 .Select(v => v.GetType().GetProperty("PatientId"))
                 .FirstOrDefault(p => p != null);
 
-            // Check if any parameter is of type Patient
-            var patientParam = context.ActionArguments.Values
-                .FirstOrDefault(arg => arg is Patient) as Patient;
-
-            if (patientParam != null)
+            if (patientIdParameter != null)
             {
-                // Validate the patient object
-                if (patientParam.OrganizationId != organizationId)
+                if (patientIdParameter.HasValue)
                 {
-                    context.Result = new UnauthorizedResult();
-                    return;
-                }
-            }
-
-            if (patientIdProperty != null)
-            {
-                var patientIdValue = patientIdProperty.GetValue(context.ActionArguments.Values.FirstOrDefault());
-                if (patientIdValue is int patientId)
-                {
+                    var patientId = patientIdParameter.Value;
                     var patient = await _patientService.GetPatientByIdAsync(patientId);
 
                     // If the patient does not exist or the patient is not in the same organization, return Unauthorized
@@ -91,6 +66,55 @@
                         return;
                     }
                 }
+
+                // Check if any parameter is of type Patient
+                var patientParam = context.ActionArguments.Values
+                    .FirstOrDefault(arg => arg is Patient) as Patient;
+
+                if (patientParam != null)
+                {
+                    // Validate the patient object
+                    if (patientParam.OrganizationId != organizationId)
+                    {
+                        context.Result = new UnauthorizedResult();
+                        return;
+                    }
+                }
+            }
+            else if (patientIdProperty != null)
+            {
+                var patientArgument = context.ActionArguments.Values.FirstOrDefault();
+                if (patientArgument != null)
+                {
+                    try
+                    {
+                        var patientId = Convert.ToInt32(patientArgument);
+                        var patient = await _patientService.GetPatientByIdAsync(patientId);
+
+                        // If the patient does not exist or the patient is not in the same organization, return Unauthorized
+                        if (patient == null || patient.OrganizationId != organizationId)
+                        {
+                            context.Result = new UnauthorizedResult();
+                            return;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log the exception details
+                        Console.WriteLine($"Error retrieving PatientId: {ex.Message}");
+                        context.Result = new BadRequestResult();
+                    }
+                }
+                else
+                {
+                    // No argument found
+                    context.Result = new BadRequestResult();
+                }
+            }
+            else
+            {
+                // PatientId property not found
+                context.Result = new BadRequestResult();
             }
 
             //// Check if any parameter is of type Patient

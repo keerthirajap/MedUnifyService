@@ -74,7 +74,12 @@ namespace MedUnify.HealthPulseAPI
             {
                 options.Filters.Add(typeof(LogPageRequestAttribute));
                 options.Filters.Add(typeof(LogExceptionAttribute));
-            }).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ResourceModels>());
+            })
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ResourceModels>())
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

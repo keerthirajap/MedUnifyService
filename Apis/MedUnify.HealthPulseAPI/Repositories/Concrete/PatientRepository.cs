@@ -19,13 +19,13 @@
 
         public async Task<List<Patient>> GetAllPatientsAsync(int organizationId)
         {
-            return await _context.Patients.Where(p => p.OrganizationId == organizationId && !p.IsDeleted)
+            return await _context.Patients.AsNoTracking().Where(p => p.OrganizationId == organizationId && !p.IsDeleted)
                 .ToListAsync();
         }
 
         public async Task<Patient> GetPatientByIdAsync(int id)
         {
-            return await _context.Patients
+            return await _context.Patients.AsNoTracking()
                                  .FirstOrDefaultAsync(p => p.PatientId == id && !p.IsDeleted);
         }
 
