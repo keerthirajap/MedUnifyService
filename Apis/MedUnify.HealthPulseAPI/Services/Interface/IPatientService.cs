@@ -4,7 +4,7 @@
 
     public interface IPatientService
     {
-        Task<IEnumerable<Patient>> GetAllPatientsAsync(int organizationId);
+        Task<List<Patient>> GetAllPatientsAsync(int organizationId);
 
         Task<Patient> GetPatientByIdAsync(int patientId);
 

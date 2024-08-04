@@ -1,6 +1,9 @@
-﻿<nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
+﻿@inject TokenAuthStateProvider AuthenticationService
+@inject NavigationManager Navigation
+
+<nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
     <div class="container">
-        
+
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,14 +14,19 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav flex-grow-1 justify-content-end">
-                   
-                    <li class="nav-item me-2"><a class="nav-link" href="\login">Login</a></li>
-                    <li class="nav-item me-2"><a class="nav-link" href="#">Product</a></li>
-                    <li class="nav-item me-2"><a class="nav-link" href="#">Features</a></li>
-                    <li class="nav-item me-2"><a class="nav-link" href="#">Enterprise</a></li>
-                    <li class="nav-item me-2"><a class="nav-link" href="#">Support</a></li>
-                    <li class="nav-item me-2"><a class="nav-link" href="#">Pricing</a></li>
 
+                    @if (isAuthenticated)
+                    {
+                        <li class="nav-item me-4"><a class="nav-link" href="\Patients">Patients</a></li>
+                        <li class="nav-item me-2">
+
+                            <button class="btn btn-danger" type="submit" @onclick="Logout"> Logout </button>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item me-2"><a class="nav-link" href="\login">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>
@@ -26,12 +34,16 @@
 </nav>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool isAuthenticated;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+    protected override async Task OnInitializedAsync()
     {
-        collapseNavMenu = !collapseNavMenu;
+        isAuthenticated = await AuthenticationService.IsAuthenticatedAsync();
+    }
+
+    private async Task Logout()
+    {
+        await AuthenticationService.LogoutAsync();
+        Navigation.NavigateTo("/login");
     }
 }

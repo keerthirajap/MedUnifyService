@@ -13,7 +13,7 @@
             _patientRepository = patientRepository;
         }
 
-        public async Task<IEnumerable<Patient>> GetAllPatientsAsync(int organizationId)
+        public async Task<List<Patient>> GetAllPatientsAsync(int organizationId)
         {
             return await _patientRepository.GetAllPatientsAsync(organizationId);
         }

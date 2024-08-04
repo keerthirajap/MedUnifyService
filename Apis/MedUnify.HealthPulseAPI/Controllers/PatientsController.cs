@@ -1,9 +1,11 @@
 ﻿namespace MedUnify.HealthPulseAPI.Controllers
 {
+    using AutoMapper;
     using MedUnify.Domain.HealthPulse;
     using MedUnify.HealthPulseAPI.Infrastructure.Filters;
     using MedUnify.HealthPulseAPI.Infrastructure.Handlers;
     using MedUnify.HealthPulseAPI.Services.Interface;
+    using MedUnify.ResourceModel.HealthPulse;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -12,25 +14,31 @@
     [Authorize]
     public class PatientsController : ControllerBase
     {
-        private readonly IPatientService _patientService;
-        private readonly IOrganizationHandler _organizationHandler;
+        private readonly IMapper _mapper;
 
-        public PatientsController(IPatientService patientService, IOrganizationHandler organizationHandler)
+        private readonly IOrganizationHandler _organizationHandler;
+        private readonly IPatientService _patientService;
+
+        public PatientsController(IMapper mapper, IPatientService patientService, IOrganizationHandler organizationHandler)
         {
+            this._mapper = mapper;
             _patientService = patientService;
             _organizationHandler = organizationHandler;
         }
 
         [Route("GetPatients")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Patient>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PatientRM>))]
         public async Task<ActionResult<List<Patient>>> GetPatients()
         {
-            // Use the handler to get the OrganizationId
             int organizationId = _organizationHandler.GetOrganizationIdFromToken(User);
 
-            // Fetch patients based on the extracted OrganizationId
+            List<PatientRM> patientsRM = new List<PatientRM>();
+
             var patients = await _patientService.GetAllPatientsAsync(organizationId);
+
+            patientsRM = this._mapper.Map<List<PatientRM>>(patients);
+
             return Ok(patients);
         }
 

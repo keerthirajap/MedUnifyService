@@ -17,7 +17,7 @@
             _context = context;
         }
 
-        public async Task<IEnumerable<Patient>> GetAllPatientsAsync(int organizationId)
+        public async Task<List<Patient>> GetAllPatientsAsync(int organizationId)
         {
             return await _context.Patients.Where(p => p.OrganizationId == organizationId && !p.IsDeleted)
                 .ToListAsync();
