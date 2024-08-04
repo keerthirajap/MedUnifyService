@@ -20,6 +20,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.26" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 		<PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+		<PackageReference Include="Toolbelt.Blazor.LoadingBar" Version="14.0.0" />
+
 	</ItemGroup>
 
 	<ItemGroup>
