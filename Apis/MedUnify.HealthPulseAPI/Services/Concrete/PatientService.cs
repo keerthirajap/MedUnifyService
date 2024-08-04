@@ -13,14 +13,14 @@
             _patientRepository = patientRepository;
         }
 
-        public async Task<IEnumerable<Patient>> GetAllPatientsAsync()
+        public async Task<IEnumerable<Patient>> GetAllPatientsAsync(int organizationId)
         {
-            return await _patientRepository.GetPatientsAsync();
+            return await _patientRepository.GetAllPatientsAsync(organizationId);
         }
 
-        public async Task<Patient> GetPatientByIdAsync(int id)
+        public async Task<Patient> GetPatientByIdAsync(int patientId)
         {
-            return await _patientRepository.GetPatientByIdAsync(id);
+            return await _patientRepository.GetPatientByIdAsync(patientId);
         }
 
         public async Task AddPatientAsync(Patient patient)
@@ -33,9 +33,9 @@
             await _patientRepository.UpdatePatientAsync(patient);
         }
 
-        public async Task DeletePatientAsync(int id)
+        public async Task DeletePatientAsync(int patientId)
         {
-            await _patientRepository.DeletePatientAsync(id);
+            await _patientRepository.DeletePatientAsync(patientId);
         }
     }
 }

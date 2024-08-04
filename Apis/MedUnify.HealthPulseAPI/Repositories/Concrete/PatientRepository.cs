@@ -17,15 +17,18 @@
             _context = context;
         }
 
-        public async Task<IEnumerable<Patient>> GetPatientsAsync()
+        public async Task<IEnumerable<Patient>> GetAllPatientsAsync(int organizationId)
         {
-            return await _context.Patients.Where(p => !p.IsDeleted).ToListAsync();
+            return await _context.Patients.Where(p => p.OrganizationId == organizationId && !p.IsDeleted)
+                .ToListAsync();
         }
 
         public async Task<Patient> GetPatientByIdAsync(int id)
         {
-            return await _context.Patients.Include(p => p.ProgressNotes)
-                                          .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
+            return await _context.Patients
+                                 .Include(p => p.Visits)
+                                    .ThenInclude(v => v.ProgressNotes)
+                                 .FirstOrDefaultAsync(p => p.PatientId == id && !p.IsDeleted);
         }
 
         public async Task AddPatientAsync(Patient patient)

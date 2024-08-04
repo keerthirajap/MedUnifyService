@@ -22,7 +22,22 @@
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Patient>))]
         public async Task<ActionResult<List<Patient>>> GetPatients()
         {
-            var patients = await _patientService.GetAllPatientsAsync();
+            // Extract the OrganizationId from the token claims
+            var organizationIdClaim = User.FindFirst("OrganizationId");
+
+            if (organizationIdClaim == null)
+            {
+                return Unauthorized("OrganizationId not found in token.");
+            }
+
+            // Convert the organizationIdClaim value to an integer
+            if (!int.TryParse(organizationIdClaim.Value, out int organizationId))
+            {
+                return BadRequest("Invalid OrganizationId in token.");
+            }
+
+            // Fetch patients based on the extracted OrganizationId
+            var patients = await _patientService.GetAllPatientsAsync(organizationId);
             return Ok(patients);
         }
 
@@ -45,7 +60,7 @@
         public async Task<ActionResult> AddPatient([FromBody] Patient patient)
         {
             await _patientService.AddPatientAsync(patient);
-            return CreatedAtAction(nameof(GetPatient), new { id = patient.Id }, patient);
+            return CreatedAtAction(nameof(GetPatient), new { id = patient.PatientId }, patient);
         }
 
         [Route("UpdatePatient")]
@@ -53,7 +68,7 @@
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdatePatient(int id, [FromBody] Patient patient)
         {
-            if (id != patient.Id)
+            if (id != patient.PatientId)
             {
                 return BadRequest();
             }

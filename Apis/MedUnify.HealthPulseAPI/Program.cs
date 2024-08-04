@@ -35,12 +35,18 @@ namespace MedUnify.HealthPulseAPI
 
             sqlConnectionString = sqlConnectionString.Replace("__ReplaceWithProjectFolder__", absoluteProjectFolderPath);
 
-            // Configure services
+            // Register repositories
             builder.Services.AddDbContext<MedUnifyDbContext>(options =>
                 options.UseSqlServer(sqlConnectionString));
 
             builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+            builder.Services.AddScoped<IVisitRepository, VisitRepository>();
+            builder.Services.AddScoped<IProgressNoteRepository, ProgressNoteRepository>();
+
+            // Register services
             builder.Services.AddScoped<IPatientService, PatientService>();
+            builder.Services.AddScoped<IVisitService, VisitService>();
+            builder.Services.AddScoped<IProgressNoteService, ProgressNoteService>();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
