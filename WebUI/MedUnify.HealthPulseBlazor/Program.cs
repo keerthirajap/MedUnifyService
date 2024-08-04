@@ -1,5 +1,8 @@
 namespace MedUnify.HealthPulseBlazor
 {
+    using Blazorise;
+    using Blazorise.Bootstrap5;
+    using Blazorise.Icons.FontAwesome;
     using MedUnify.HealthPulseBlazor;
     using MedUnify.HealthPulseBlazor.Providers;
     using MedUnify.HealthPulseBlazor.Services;
@@ -58,6 +61,14 @@ namespace MedUnify.HealthPulseBlazor
                 //client.BaseAddress = new Uri(builder.Configuration["API_URLS:GettHit.TraficEx"]);
                 //client.EnableIntercept(sp);
             });
+
+            builder.Services
+                .AddBlazorise(options =>
+                {
+                    options.Immediate = true;
+                })
+                .AddBootstrap5Providers()
+                .AddFontAwesomeIcons();
 
             await builder.Build().RunAsync();
         }

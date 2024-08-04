@@ -108,11 +108,16 @@
 
         [Route("DeletePatient")]
         [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> DeletePatient(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ReturnStatusResourseModel))]
+        public async Task<ActionResult> DeletePatient(int patientId)
         {
-            await _patientService.DeletePatientAsync(id);
-            return NoContent();
+            ReturnStatusResourseModel returnStatusRM = new ReturnStatusResourseModel();
+            await _patientService.DeletePatientAsync(patientId);
+
+            returnStatusRM.Status = "success";
+            returnStatusRM.Title = "Deleted Successfully";
+            returnStatusRM.Message = $"Patient details updated successfully.";
+            return this.Ok(returnStatusRM);
         }
     }
 }

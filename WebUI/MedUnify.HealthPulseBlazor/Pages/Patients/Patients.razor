@@ -1,87 +1,163 @@
 ﻿@page "/patients"
 @using MedUnify.ResourceModel.HealthPulse
+
 @inject PatientAPIService PatientService
+@inject IJSRuntime _jsRuntime
 
-<div class="col-12 text-center">
-
-
-    <h3>Patients List</h3>
-
-    @if (patients == null)
-    {
-        <p>Loading...</p>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Mobile Number</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var patient in patients)
-                    {
-                        <tr>
-                            <td>@patient.FirstName</td>
-                            <td>@patient.LastName</td>
-                            <td>@patient.MobileNumber</td>
-                            <td>
-                                <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#details-@(patient.PatientId)" aria-expanded="false" aria-controls="details-@(patient.PatientId)">
-                                    Details
-                                </button>
-                                <a class="btn btn-primary ms-2" href="/edit-patient/@patient.PatientId">
-                                    Edit
-                                </a>
-                            </td>
-                        </tr>
-                        <tr id="details-@(patient.PatientId)" class="collapse">
-                            <td colspan="4">
-                                <div class="card card-body">
-                                    <div class="row">
-                                        <div class="col-2 text-end"><strong>Address:</strong></div>
-                                        <div class="col-8 text-start"> @patient.Address</div>
-                                    </div>
-
-                                    <div class="row mt-2">
-
-                                        <div class="col-2 text-end"><strong>City:</strong></div>
-                                        <div class="col-4 text-start"> @patient.City</div>
-
-                                        <div class="col-2 text-end"><strong>State:</strong></div>
-                                        <div class="col-4 text-start"> @patient.State</div>
-
-                                    </div>
-                                    <div class="row mt-2">
-
-                                        <div class="col-2 text-end"><strong>Created At:</strong></div>
-                                        <div class="col-4 text-start">@patient.CreatedAt.ToString("g")</div>
-
-                                        <div class="col-2 text-end"><strong>Updated At:</strong></div>
-                                        <div class="col-4 text-start">@patient.UpdatedAt.ToString("g")</div>
-                                    </div>
-
-
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+<div class="container mt-4">
+    <div class="d-flex mb-3">
+        <h3 class="display-6 ms-auto">Patients List</h3>
+        <div class="ms-auto">
+            <a href="/add-patient" class="btn btn-success ms-auto mt-3"> Add Patient </a>
         </div>
-    }
+    </div>
+    <div class="row">
+        <div class="col-12">
+            @if (patients == null)
+            {
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table  table-hover table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Mobile Number</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var patient in patients)
+                            {
+                                <tr>
+                                    <td>@patient.FirstName</td>
+                                    <td>@patient.LastName</td>
+                                    <td>@patient.MobileNumber</td>
+                                    <td>
+                                        <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#details-@(patient.PatientId)" aria-expanded="false" aria-controls="details-@(patient.PatientId)">
+                                            Details
+                                        </button>
+                                        <a class="btn btn-warning ms-2" href="/edit-patient/@patient.PatientId">
+                                            Edit
+                                        </a>
 
+                                        <button class="btn btn-danger ms-2" @onclick="() => ConfirmDelete(patient.PatientId)">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr id="details-@(patient.PatientId)" class="collapse">
+                                    <td colspan="4">
+                                        <div class="card card-body">
+                                            <div class="row text-center">
+                                                <h4 class="display-7">Patient Details</h4>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-2 text-end"><strong>Address:</strong></div>
+                                                <div class="col-8 text-start"> @patient.Address</div>
+                                            </div>
+
+                                            <div class="row mt-2">
+
+                                                <div class="col-2 text-end"><strong>City:</strong></div>
+                                                <div class="col-4 text-start"> @patient.City</div>
+
+                                                <div class="col-2 text-end"><strong>State:</strong></div>
+                                                <div class="col-4 text-start"> @patient.State</div>
+
+                                            </div>
+                                            <div class="row mt-2">
+
+                                                <div class="col-2 text-end"><strong>Created At:</strong></div>
+                                                <div class="col-4 text-start">@patient.CreatedAt.ToString("g")</div>
+
+                                                <div class="col-2 text-end"><strong>Updated At:</strong></div>
+                                                <div class="col-4 text-start">@patient.UpdatedAt.ToString("g")</div>
+                                            </div>
+
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <DeletePatientConfirmation ShowDialog="showDeletePatientConfirmDialog"
+                               OnConfirm="DeletePatientConfirmed"
+                               OnCancel="CloseConfirmationDeleteDialog" />
 </div>
 
 @code {
     private List<PatientRM> patients;
 
+    private bool showDeletePatientConfirmDialog;
+    private int patientIdToDelete;
+
     protected override async Task OnInitializedAsync()
     {
+        await GetAllPatientsAsync();
+    }
+
+
+    private async Task GetAllPatientsAsync()
+    {
         patients = await PatientService.GetPatientsAsync();
+    }
+
+    private void ConfirmDelete(int patientId)
+    {
+        patientIdToDelete = patientId;
+        showDeletePatientConfirmDialog = true;
+    }
+
+    private void CloseConfirmationDeleteDialog()
+    {
+        showDeletePatientConfirmDialog = false;
+    }
+
+    private async Task DeletePatientConfirmed(bool confirmed)
+    {
+        if (confirmed)
+        {
+            var response = await PatientService.DeletePatientAsync(patientIdToDelete);
+
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                var returnStatusRM = JsonSerializer.Deserialize<ReturnStatusResourseModel>(body);
+
+
+                await this._jsRuntime.InvokeVoidAsync("appScripts.showSweetAlertPopup",
+                                 returnStatusRM.Status,
+                                 returnStatusRM.Title, returnStatusRM.Message);
+            }
+            else if (response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                var returnStatusRM = JsonSerializer.Deserialize<ReturnStatusResourseModel>(body);
+                await this._jsRuntime.InvokeVoidAsync("appScripts.showSweetAlertPopup",
+                                 returnStatusRM.Status,
+                                 returnStatusRM.Title, returnStatusRM.Message);
+
+            }
+
+            await GetAllPatientsAsync();
+            StateHasChanged();
+        }
     }
 }

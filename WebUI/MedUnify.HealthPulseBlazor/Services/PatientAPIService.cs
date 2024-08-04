@@ -54,12 +54,12 @@
         //    response.EnsureSuccessStatusCode();
         //}
 
-        //public async Task DeletePatientAsync(int patientId)
-        //{
-        //    await AddAuthorizationHeaderAsync();
-        //    var response = await _httpClient.DeleteAsync($"https://api.example.com/DeletePatient?id={patientId}");
-        //    response.EnsureSuccessStatusCode();
-        //}
+        public async Task<HttpResponseMessage> DeletePatientAsync(int patientId)
+        {
+            await AddAuthorizationHeaderAsync();
+            var response = await _httpClient.DeleteAsync($"Patients/DeletePatient?patientId={patientId}");
+            return response;
+        }
 
         private async Task<string> GetTokenAsync()
         {
