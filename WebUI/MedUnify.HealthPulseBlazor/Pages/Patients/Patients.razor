@@ -4,108 +4,82 @@
 @inject PatientAPIService PatientService
 @inject IJSRuntime _jsRuntime
 
-<div class="container mt-4">
-    <div class="d-flex mb-3">
+@inherits BasePatients
+
+
+<Blazorise.Container Class="mt-4">
+   <div class="d-flex mb-3">
         <h3 class="display-6 ms-auto">Patients List</h3>
         <div class="ms-auto">
             <a href="/add-patient" class="btn btn-success ms-auto mt-3"> Add Patient </a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
+    <Blazorise.Row>
+        <Blazorise.Column>
             @if (patients == null)
             {
                 <div class="text-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                    <Blazorise.Spinner Color="Color.Primary" />
+                    <span class="visually-hidden">Loading...</span>
                 </div>
             }
             else
             {
-                <div class="table-responsive">
-                    <table class="table  table-hover table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Mobile Number</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var patient in patients)
+                <Blazorise.Table Responsive="true" Hoverable="true" Bordered="true" Striped="true">
+                    <Blazorise.TableHeader>
+                        <Blazorise.TableRow>
+                            <Blazorise.TableHeaderCell>First Name</Blazorise.TableHeaderCell>
+                            <Blazorise.TableHeaderCell>Last Name</Blazorise.TableHeaderCell>
+                            <Blazorise.TableHeaderCell>Mobile Number</Blazorise.TableHeaderCell>
+                            <Blazorise.TableHeaderCell>Actions</Blazorise.TableHeaderCell>
+                        </Blazorise.TableRow>
+                    </Blazorise.TableHeader>
+                    <Blazorise.TableBody>
+                        @foreach (var patient in patients)
+                        {
+                            <Blazorise.TableRow>
+                                <Blazorise.TableRowCell>@patient.FirstName</Blazorise.TableRowCell>
+                                <Blazorise.TableRowCell>@patient.LastName</Blazorise.TableRowCell>
+                                <Blazorise.TableRowCell>@patient.MobileNumber</Blazorise.TableRowCell>
+                                <Blazorise.TableRowCell>
+                                    <Blazorise.Button Color="Color.Info" @onclick="() => ToggleDetails(patient.PatientId)">
+                                        <Blazorise.Icon IconName="fas fa-info-circle" /> Details
+                                    </Blazorise.Button>
+                                    <Blazorise.Link To="@string.Concat("/edit-patient/" + @patient.PatientId)"
+                                        Class="btn btn-warning ms-2" Target="Target.Parent">
+                                        Edit
+                                    </Blazorise.Link>
+
+                                    @*  <Blazorise.Link Href="/edit-patient/@patient.PatientId" Class="btn btn-warning ms-2">
+                            <Blazorise.Icon IconName="fas fa-edit" /> Edit
+                            </Blazorise.Link> *@
+                                    <Blazorise.Button Color="Color.Danger" Class="ms-2" @onclick="() => ConfirmDelete(patient.PatientId)">
+                                        <Blazorise.Icon IconName="fas fa-trash-alt" /> Delete
+                                    </Blazorise.Button>
+                                </Blazorise.TableRowCell>
+                            </Blazorise.TableRow>
+
+                            if (_expandedPatientId == patient.PatientId)
                             {
-                                <tr>
-                                    <td>@patient.FirstName</td>
-                                    <td>@patient.LastName</td>
-                                    <td>@patient.MobileNumber</td>
-                                    <td>
-                                        <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#details-@(patient.PatientId)" aria-expanded="false" aria-controls="details-@(patient.PatientId)">
-                                            Details
-                                        </button>
-                                        <a class="btn btn-warning ms-2" href="/edit-patient/@patient.PatientId">
-                                            Edit
-                                        </a>
-
-                                        <button class="btn btn-danger ms-2" @onclick="() => ConfirmDelete(patient.PatientId)">
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr id="details-@(patient.PatientId)" class="collapse">
-                                    <td colspan="4">
-                                        <div class="card card-body">
-                                            <div class="row text-center">
-                                                <h4 class="display-7">Patient Details</h4>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-2 text-end"><strong>Address:</strong></div>
-                                                <div class="col-8 text-start"> @patient.Address</div>
-                                            </div>
-
-                                            <div class="row mt-2">
-
-                                                <div class="col-2 text-end"><strong>City:</strong></div>
-                                                <div class="col-4 text-start"> @patient.City</div>
-
-                                                <div class="col-2 text-end"><strong>State:</strong></div>
-                                                <div class="col-4 text-start"> @patient.State</div>
-
-                                            </div>
-                                            <div class="row mt-2">
-
-                                                <div class="col-2 text-end"><strong>Created At:</strong></div>
-                                                <div class="col-4 text-start">@patient.CreatedAt.ToString("g")</div>
-
-                                                <div class="col-2 text-end"><strong>Updated At:</strong></div>
-                                                <div class="col-4 text-start">@patient.UpdatedAt.ToString("g")</div>
-                                            </div>
-
-
-                                        </div>
-                                    </td>
-                                </tr>
+                                <Blazorise.TableRow>
+                                    <Blazorise.TableRowCell ColSpan="4">
+                                        <PatientDetails Patient="patient" IsVisible="@(patient.PatientId == _expandedPatientId)" />
+                                    </Blazorise.TableRowCell>
+                                </Blazorise.TableRow>
                             }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                    </Blazorise.TableBody>
+                </Blazorise.Table>
             }
-        </div>
-    </div>
-
+        </Blazorise.Column>
+    </Blazorise.Row>
 
     <DeletePatientConfirmation ShowDialog="showDeletePatientConfirmDialog"
                                OnConfirm="DeletePatientConfirmed"
                                OnCancel="CloseConfirmationDeleteDialog" />
-</div>
+</Blazorise.Container>
 
 @code {
-    private List<PatientRM> patients;
-
-    private bool showDeletePatientConfirmDialog;
-    private int patientIdToDelete;
 
     protected override async Task OnInitializedAsync()
     {
@@ -113,51 +87,9 @@
     }
 
 
-    private async Task GetAllPatientsAsync()
+    private void ToggleDetails(int patientId)
     {
-        patients = await PatientService.GetPatientsAsync();
-    }
-
-    private void ConfirmDelete(int patientId)
-    {
-        patientIdToDelete = patientId;
-        showDeletePatientConfirmDialog = true;
-    }
-
-    private void CloseConfirmationDeleteDialog()
-    {
-        showDeletePatientConfirmDialog = false;
-    }
-
-    private async Task DeletePatientConfirmed(bool confirmed)
-    {
-        if (confirmed)
-        {
-            var response = await PatientService.DeletePatientAsync(patientIdToDelete);
-
-
-            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                var body = await response.Content.ReadAsStringAsync();
-                var returnStatusRM = JsonSerializer.Deserialize<ReturnStatusResourseModel>(body);
-
-
-                await this._jsRuntime.InvokeVoidAsync("appScripts.showSweetAlertPopup",
-                                 returnStatusRM.Status,
-                                 returnStatusRM.Title, returnStatusRM.Message);
-            }
-            else if (response.IsSuccessStatusCode)
-            {
-                var body = await response.Content.ReadAsStringAsync();
-                var returnStatusRM = JsonSerializer.Deserialize<ReturnStatusResourseModel>(body);
-                await this._jsRuntime.InvokeVoidAsync("appScripts.showSweetAlertPopup",
-                                 returnStatusRM.Status,
-                                 returnStatusRM.Title, returnStatusRM.Message);
-
-            }
-
-            await GetAllPatientsAsync();
-            StateHasChanged();
-        }
+        _expandedPatientId = patientId;
+        StateHasChanged();
     }
 }
