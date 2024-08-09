@@ -2,6 +2,7 @@
 {
     using MedUnify.Domain.HealthPulse;
     using MedUnify.HealthPulseAPI.Services.Interface;
+    using MedUnify.ResourceModel.HealthPulse;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -18,7 +19,10 @@
         }
 
         [HttpGet("patient/{patientId}")]
-        public async Task<ActionResult<IEnumerable<Visit>>> GetVisitsByPatientId(int patientId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PatientRM>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent]
+
+        public async Task<ActionResult<List<Visit>>> GetVisitsByPatientId(int patientId)
         {
             var visits = await _visitService.GetVisitsByPatientIdAsync(patientId);
             return Ok(visits);

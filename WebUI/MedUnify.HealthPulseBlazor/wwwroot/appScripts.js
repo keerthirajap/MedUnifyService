@@ -5,6 +5,12 @@
         publicMethod.hello = function () {
             console.log("hello");
         }
+
+
+        publicMethod.redirectTo = function (path) {
+            window.location.replace(path);
+        }
+
         publicMethod.showSweetAlertPopup = function (status, title, message) {
 
             console.log(status + title + message);

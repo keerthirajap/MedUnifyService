@@ -4,7 +4,7 @@
 
     public interface IVisitService
     {
-        Task<IEnumerable<Visit>> GetVisitsByPatientIdAsync(int patientId);
+        Task<List<Visit>> GetVisitsByPatientIdAsync(int patientId);
 
         Task<Visit> GetVisitByIdAsync(int visitId);
 

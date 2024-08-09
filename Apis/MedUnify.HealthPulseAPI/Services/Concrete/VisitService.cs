@@ -13,7 +13,7 @@
             _visitRepository = visitRepository;
         }
 
-        public async Task<IEnumerable<Visit>> GetVisitsByPatientIdAsync(int patientId)
+        public async Task<List<Visit>> GetVisitsByPatientIdAsync(int patientId)
         {
             return await _visitRepository.GetVisitsByPatientIdAsync(patientId);
         }

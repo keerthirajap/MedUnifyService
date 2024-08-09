@@ -85,12 +85,15 @@ else
             if (isAuthenticated)
             {
 
+                //await this._jsRuntime.InvokeVoidAsync("appScripts.redirectTo", "/");
+
                 await this._jsRuntime.InvokeVoidAsync("appScripts.showSweetToastNotification",
                                             "success",
                                             "Logged in successfully",
                                             "2500");
 
                 Navigation.NavigateTo("/");
+                StateHasChanged();
 
             }
             else
